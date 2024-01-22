@@ -24,12 +24,19 @@ package("vulkan-validationlayers")
 
         add_deps("cmake")
         add_deps("glslang", "spirv-headers", "spirv-tools")
+
         if is_plat("windows") then
             add_syslinks("Advapi32")
+        end
+    
+        if is_plat("mingw") and is_subhost("msys") then
+            add_extsources("pacman::vulkan-validation-layers")   
         elseif is_plat("linux") then
-            add_extsources("apt::vulkan-validationlayers-dev", "pacman::vulkan-extra-layers")
+            add_extsources("apt::vulkan-validationlayers-dev", "pacman::vulkan-validation-layers")
             add_deps("ninja")
             add_deps("wayland", "libxrandr", "libxcb", "libxkbcommon")
+        elseif is_plat("macosx") then
+            add_extsourves("brew::vulkan-validationlayers")
         end
     end
 
